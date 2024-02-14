@@ -14,10 +14,16 @@ class Node
         this->next = NULL;
     }
 
-    void InsertNode()
+    void InsertNode(ProductData data)
     {
-        Node newNode = Node();
+        Node* newNode = new Node();
+        newNode->SetData(data);
+        this->next = newNode;
 
+    }
+    void SetData(ProductData data)
+    {
+        this->data = data;
     }
 
 };
