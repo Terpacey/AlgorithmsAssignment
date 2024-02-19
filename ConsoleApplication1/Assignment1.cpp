@@ -120,19 +120,21 @@ public:
 
     Node* GetIndex(int index)
     {
-        if (index == 0)
+        Node* first = prev;
+        while (prev != nullptr)
         {
-            return this;
+            first = first->prev;
         }
-        else if (next == nullptr)
+        for (int i = 0; i < index; i++)
         {
-            cout << "\nError in sort indexing\n" << "Index is: " <<index <<endl;
-            return nullptr;
+            first = first->next;
+            if (first = nullptr)
+            {
+                return nullptr;
+            }
         }
-        else
-        {
-            next->GetIndex(index - 1);
-        }
+        return first;
+
     }
 
     void NodeDelete(int id)
@@ -198,30 +200,48 @@ public:
 
  void BubbleSort(Node* start)
  {
-     ProductData data;
-     for (int i = 0; i < start->count(); i++) 
-     {
-         for (int j = 0; j < start->count() - i; j++)
-         {
-             Node* currentNode;
-             Node* next;
-             currentNode = start->GetIndex(j);
-             next = start->GetIndex(j+1);
-             data = currentNode->data;
 
-             if (next != nullptr)
-             {
-                 //return;
-                 if (currentNode->data.GetID() > next->data.GetID())
-                 {
-                     currentNode->data = next->data;
-                     next->data = data;
+
+     ProductData data;
+     Node* first = start;
+     while (first != nullptr) {
+         Node* second = start;
+             while (second != nullptr) {
+                 if (first != second) {
+                     if (first->data.GetID() < second->data.GetID())
+                     {
+                         ProductData temp = second->data;
+                         second->data = first->data;
+                         first->data = temp;
+                     }
                  }
+                 second = second->next;
              }
-             
-         }
-         cout << "Mlem";
+         first = first->next;
      }
+     //for (int i = 0; i < start->count(); i++) 
+     //{
+     //    for (int j = 0; j < start->count() - i; j++)
+     //    {
+     //        Node* currentNode;
+     //        Node* next;
+     //        currentNode = start->GetIndex(j);
+     //        next = start->GetIndex(j+1);
+     //        data = currentNode->data;
+
+     //        if (next != nullptr)
+     //        {
+     //            //return;
+     //            if (currentNode->data.GetID() > next->data.GetID())
+     //            {
+     //                currentNode->data = next->data;
+     //                next->data = data;
+     //            }
+     //        }
+     //        
+     //    }
+     //    cout << "Mlem";
+     //}
  }
 
 
