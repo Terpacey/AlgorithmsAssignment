@@ -118,33 +118,21 @@ public:
         }
     }
 
-    Node* GetIndex(int index)
-    {
-        Node* first = prev;
-        while (prev != nullptr)
-        {
-            first = first->prev;
-        }
-        for (int i = 0; i < index; i++)
-        {
-            first = first->next;
-            if (first = nullptr)
-            {
-                return nullptr;
-            }
-        }
-        return first;
-
-    }
-
     void NodeDelete(int id)
     {
         Node* delNode;
         delNode = Search(id);
         if (delNode != nullptr)
         {
-            delNode->prev->next = delNode -> next;
-            delNode->next->prev = delNode -> prev;
+            if (delNode->next != nullptr)
+            {
+                delNode->next->prev = delNode->prev;
+            }
+            if (delNode->prev != nullptr)
+            {
+                delNode->prev->next = delNode->next;
+            }
+            
             delete(delNode);
         }
         else
@@ -167,19 +155,6 @@ public:
         }
 
     }
-
-    int count()
-    {
-        if (next == nullptr)
-        {
-            return 1;
-        }
-        else
-        {
-            return 1 + next->count();
-        }
-    }
-
 };
 
 
@@ -200,9 +175,6 @@ public:
 
  void BubbleSort(Node* start)
  {
-
-
-     ProductData data;
      Node* first = start;
      while (first != nullptr) {
          Node* second = start;
@@ -219,29 +191,6 @@ public:
              }
          first = first->next;
      }
-     //for (int i = 0; i < start->count(); i++) 
-     //{
-     //    for (int j = 0; j < start->count() - i; j++)
-     //    {
-     //        Node* currentNode;
-     //        Node* next;
-     //        currentNode = start->GetIndex(j);
-     //        next = start->GetIndex(j+1);
-     //        data = currentNode->data;
-
-     //        if (next != nullptr)
-     //        {
-     //            //return;
-     //            if (currentNode->data.GetID() > next->data.GetID())
-     //            {
-     //                currentNode->data = next->data;
-     //                next->data = data;
-     //            }
-     //        }
-     //        
-     //    }
-     //    cout << "Mlem";
-     //}
  }
 
 
@@ -252,7 +201,7 @@ int main()
 
     Node* head = new Node();    
 
-    fstream datafile;
+    ifstream datafile;
     datafile.open("product_data.txt");
     
     if (datafile.is_open())
@@ -265,13 +214,56 @@ int main()
         }
         datafile.close();
     }
-    else cout << "Unable to open file";
+    else cout << "Unable to open file\n";
 
-    BubbleSort(head);
-    for (int i = 0; i < head->count(); i++)
-    {
-        cout << head->GetIndex(i)->data.GetID() << endl;
-    }
+    int choice;
+    Node* first;
+    Node* search = head;
+    do {
+        cout << "\nEnter 1 to display the current state of the Linked List, 2 to insert a value, 3 to delete a value, 4 to search for a value and 5 to sort using Bubble sort. Enter 0 to exit\n";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1: 
+            first = head;
+            cout << "\nCurrent list: \n";
+            while (first != nullptr)
+            {
+                cout << "ProductID: "<< first->data.GetID() << "Product Name: " << first->data.GetName() << "Product Price: " << first->data.GetPrice() << "Product Category: " << first->data.GetCategory() << endl;
+                first = first->next;
+            }
+            break;
+        case 2:
+            cout << "\nEnter ProductID, Price, Name and Category in order\n";
+            cin >> id >> price;
+            getline(cin, name);
+            getline(cin, category);
+            currentData.InsertProductData(stoi(id), stof(price), name, category);
+            break;
+        case 3:
+            cout << "\nEnter ProductID to delete\n";
+            cin >> id;
+            head->NodeDelete(stoi(id));
+            break;
+        case 4:
+            cout << "\nEnter ProductID to search\n";
+            cin >> id;
+            search->Search(stoi(id));
+            cout << "ProductID: " << search->data.GetID() << "Product Name: " << search->data.GetName() << "Product Price: " << search->data.GetPrice() << "Product Category: " << search->data.GetCategory() << endl;
+            break;
+        case 5:
+            BubbleSort(head);
+            break;
+        case 0: 
+            exit;
+        default:
+            cout << "\nPlease enter a valid choice\n";
+            break;
 
+        }
+    } while (choice != 0);
+    
+
+    
 
 }
